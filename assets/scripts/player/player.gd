@@ -4,6 +4,8 @@ extends CharacterBody2D
 
 var speed = 200.0
 var direction: float = 0.0
+var curr_health: int
+
 const SLIDESPEED = 500.0		# Sliding movement speed. (Not entirely sure why this has to be set so high to do anything)
 const DIVESPEED = 550.0			# Diving movement speed (see above)
 const CRAWLSPEED = 120.0		# Crawling movement speed.
@@ -43,6 +45,7 @@ var walljump_force: float = 500
 
 func _ready():
 	animation_player.animation_finished.connect(_on_animation_player_animation_finished)
+	curr_health = 100
 	pass
 	
 #============================================================================
@@ -196,6 +199,22 @@ func _physics_process(delta: float) -> void:
 			animation_player.play("FallBeta")
 	if is_on_wall_only() and velocity.y > 0 and direction != 0:
 		animation_player.play("WallSlide")
+
+func _on_hurt_box_area_entered(area: Area2D) -> void:
+	if area is damageArea:
+		take_damage(area.damage, area.global_position, area.knock_force)
+	
+func take_damage(amount: int, hazard_pos: Vector2, knockback: float) -> void:
+	
+	curr_health -= amount
+	print("Taking damage")
+	var knock_dir: Vector2 = (global_position - hazard_pos).normalized()
+	velocity = knock_dir * knockback
+	if curr_health <= 0:
+		die()
+
+func die() -> void:
+	queue_free()
 	
 	
 #============================================================================

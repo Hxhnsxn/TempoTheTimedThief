@@ -14,8 +14,8 @@
 [ext_resource type="PackedScene" uid="uid://dt6yirpu2vhpl" path="res://assets/scenes/items and interactables/breakable_block.tscn" id="10_b1n4a"]
 [ext_resource type="PackedScene" uid="uid://bffjflymij2ds" path="res://assets/scenes/items and interactables/treasure/large_chest.tscn" id="10_jfhiy"]
 [ext_resource type="PackedScene" uid="uid://be5rj117wlehy" path="res://assets/scenes/items and interactables/treasure/small_chest.tscn" id="12_v4ram"]
-[ext_resource type="PackedScene" uid="uid://d3xqegya7ip7y" path="res://assets/scenes/enemies/blip.tscn" id="13_b1n4a"]
-[ext_resource type="PackedScene" uid="uid://bhw4n2ujewlqb" path="res://assets/scenes/items and interactables/zones/slow_zone.tscn" id="15_452m6"]
+[ext_resource type="PackedScene" uid="uid://d3xqegya7ip7y" path="res://assets/scenes/enemies/sand_shifter.tscn" id="13_b1n4a"]
+[ext_resource type="PackedScene" uid="uid://bqx63s0ie5bp7" path="res://assets/scenes/items and interactables/damage_area.tscn" id="15_txix4"]
 
 [sub_resource type="AtlasTexture" id="AtlasTexture_f7kk0"]
 atlas = ExtResource("1_wjfwt")
@@ -485,3 +485,20 @@ debug_color = Color(0.8907457, 0.82503855, 1, 0.41960785)
 
 [node name="Player" parent="." unique_id=1102362985 instance=ExtResource("2_tgljw")]
 position = Vector2(2130, 212)
+
+[node name="DamageAreas" type="Node2D" parent="." unique_id=789299919]
+
+[node name="damage_area" parent="DamageAreas" unique_id=1035231488 instance=ExtResource("15_txix4")]
+position = Vector2(2164, 156)
+
+[node name="damage_area2" parent="DamageAreas" unique_id=351586661 instance=ExtResource("15_txix4")]
+position = Vector2(2243, 156)
+
+[node name="damage_area3" parent="DamageAreas" unique_id=1607573988 instance=ExtResource("15_txix4")]
+position = Vector2(2435, 122)
+
+[node name="damage_area4" parent="DamageAreas" unique_id=987120367 instance=ExtResource("15_txix4")]
+position = Vector2(2435, 139)
+
+[node name="damage_area5" parent="DamageAreas" unique_id=792938278 instance=ExtResource("15_txix4")]
+position = Vector2(2547, 283)
