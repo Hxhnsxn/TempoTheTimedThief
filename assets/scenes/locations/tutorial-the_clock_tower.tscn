@@ -327,13 +327,12 @@ size = Vector2(32, 32)
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_ysy5o"]
 size = Vector2(128, 7)
 
-[sub_resource type="RectangleShape2D" id="RectangleShape2D_ccj0v"]
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_78tk6"]
 size = Vector2(16, 16)
 
 [node name="TutorialTheClockTower" type="Node2D" unique_id=960022459]
 
 [node name="ParallaxBG" type="Node2D" parent="." unique_id=799293462]
-visible = false
 position = Vector2(2576, 212)
 metadata/_edit_lock_ = true
 metadata/_edit_group_ = true
@@ -490,14 +489,12 @@ position = Vector2(2347, -91.5)
 shape = SubResource("RectangleShape2D_ysy5o")
 debug_color = Color(0.8907457, 0.82503855, 1, 0.41960785)
 
-[node name="DamageAreas" type="Node2D" parent="." unique_id=560437816]
+[node name="DamageArea" parent="." unique_id=633864572 instance=ExtResource("16_nmr50")]
+position = Vector2(2417, 191)
 
-[node name="DamageArea" parent="DamageAreas" unique_id=633864572 instance=ExtResource("16_nmr50")]
-position = Vector2(2409, 121)
-
-[node name="CollisionShape2D" type="CollisionShape2D" parent="DamageAreas/DamageArea" unique_id=779739284]
-position = Vector2(138, 163)
-shape = SubResource("RectangleShape2D_ccj0v")
+[node name="CollisionShape2D" type="CollisionShape2D" parent="DamageArea" unique_id=900203123]
+position = Vector2(130, 93)
+shape = SubResource("RectangleShape2D_78tk6")
 
 [node name="Player" parent="." unique_id=1102362985 instance=ExtResource("2_tgljw")]
 position = Vector2(2497, 308)

@@ -201,23 +201,6 @@ func _physics_process(delta: float) -> void:
 	if is_on_wall_only() and velocity.y > 0 and direction != 0:
 		animation_player.play("WallSlide")
 
-func _on_hurt_box_area_entered(area: Area2D) -> void:
-	if area is damageArea:
-		take_damage(area.damage, area.global_position, area.knock_force)
-	
-func take_damage(amount: int, hazard_pos: Vector2, knockback: float) -> void:
-	
-	curr_health -= amount
-	print("Taking damage")
-	var knock_dir: Vector2 = (global_position - hazard_pos).normalized()
-	velocity = knock_dir * knockback
-	if curr_health <= 0:
-		die()
-
-func die() -> void:
-	queue_free()
-	
-	
 #============================================================================
 #============================================================================
 #============================================================================
