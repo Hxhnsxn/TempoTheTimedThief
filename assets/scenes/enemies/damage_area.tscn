@@ -1,0 +1,8 @@
+[gd_scene format=3 uid="uid://bqx63s0ie5bp7"]
+
+[ext_resource type="Script" uid="uid://dkaehscssrc45" path="res://assets/scripts/player/damage_area.gd" id="1_tgi7o"]
+
+[node name="DamageArea" type="Area2D" unique_id=633864572]
+collision_layer = 8
+collision_mask = 0
+script = ExtResource("1_tgi7o")

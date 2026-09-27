@@ -9,6 +9,7 @@
 [ext_resource type="Texture2D" uid="uid://cmppn4brknccc" path="res://assets/sprites/player/Sheets/Crawl.png" id="4_n7aby"]
 [ext_resource type="Script" uid="uid://failsum58846" path="res://assets/scripts/player/state machine (UNUSED)/state_machine.gd" id="5_xvhxs"]
 [ext_resource type="Texture2D" uid="uid://bwvf1g3onqqpp" path="res://assets/sprites/player/Sheets/Fall.png" id="6_0g25m"]
+[ext_resource type="Texture2D" uid="uid://cay78mkle2mty" path="res://assets/sprites/player/Sheets/Damaged.png" id="6_u84jc"]
 [ext_resource type="Texture2D" uid="uid://cf0n15puydccy" path="res://assets/sprites/player/Sheets/Dive Kick.png" id="6_yfi7d"]
 [ext_resource type="Texture2D" uid="uid://cdo2fpeho8hsm" path="res://assets/sprites/player/Sheets/Flip.png" id="7_hsamt"]
 [ext_resource type="Texture2D" uid="uid://1of62oqxee2f" path="res://assets/sprites/player/Sheets/Slide.png" id="9_hyvrl"]
@@ -24,6 +25,10 @@ height = 14.0
 
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_n7aby"]
 size = Vector2(24, 28)
+
+[sub_resource type="CapsuleShape2D" id="CapsuleShape2D_b3dqe"]
+radius = 7.0
+height = 24.0
 
 [sub_resource type="Animation" id="Animation_ratu8"]
 resource_name = "Attack"
@@ -250,6 +255,45 @@ tracks/2/keys = {
 "transitions": PackedFloat32Array(1),
 "update": 1,
 "values": [1]
+}
+
+[sub_resource type="Animation" id="Animation_oet4l"]
+resource_name = "Damaged"
+tracks/0/type = "value"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath("Sprite2D:texture")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 1,
+"values": [ExtResource("6_u84jc")]
+}
+tracks/1/type = "value"
+tracks/1/imported = false
+tracks/1/enabled = true
+tracks/1/path = NodePath("Sprite2D:hframes")
+tracks/1/interp = 1
+tracks/1/loop_wrap = true
+tracks/1/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 1,
+"values": [1]
+}
+tracks/2/type = "value"
+tracks/2/imported = false
+tracks/2/enabled = true
+tracks/2/path = NodePath("Sprite2D:frame")
+tracks/2/interp = 1
+tracks/2/loop_wrap = true
+tracks/2/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 1,
+"values": [0]
 }
 
 [sub_resource type="Animation" id="Animation_b3dqe"]
@@ -672,6 +716,7 @@ _data = {
 &"Crawl": SubResource("Animation_o5c66"),
 &"Crouch": SubResource("Animation_0hrit"),
 &"CrouchBeta": SubResource("Animation_0g25m"),
+&"Damaged": SubResource("Animation_oet4l"),
 &"DiveKick": SubResource("Animation_b3dqe"),
 &"Fall": SubResource("Animation_0gfpk"),
 &"FallBeta": SubResource("Animation_hyvrl"),
@@ -689,7 +734,11 @@ _data = {
 [node name="Player" type="CharacterBody2D" unique_id=1102362985]
 script = ExtResource("1_s027a")
 
-[node name="PlayerHurtbox" type="CollisionShape2D" parent="." unique_id=1020564697]
+[node name="Sprite2D" type="Sprite2D" parent="." unique_id=2139937811]
+position = Vector2(0, -24)
+texture = ExtResource("2_xo733")
+
+[node name="PlayerCollisionBox" type="CollisionShape2D" parent="." unique_id=1020564697]
 editor_description = "The player's collision shape."
 position = Vector2(0, 4)
 shape = SubResource("CapsuleShape2D_hfphn")
@@ -721,6 +770,15 @@ shape = SubResource("RectangleShape2D_n7aby")
 disabled = true
 debug_color = Color(1, 0, 0, 0.41960785)
 
+[node name="Hurtbox" type="Area2D" parent="." unique_id=136945510]
+collision_layer = 0
+collision_mask = 8
+
+[node name="PlayerHurtbox" type="CollisionShape2D" parent="Hurtbox" unique_id=1756556022]
+position = Vector2(0, 4)
+shape = SubResource("CapsuleShape2D_b3dqe")
+debug_color = Color(0.99673706, 0, 0.1898483, 0.41960785)
+
 [node name="Camera2D" type="Camera2D" parent="." unique_id=1351649107]
 position = Vector2(0, -44)
 zoom = Vector2(3, 3)
@@ -745,13 +803,6 @@ one_shot = true
 [node name="StateMachine" type="Node" parent="." unique_id=1448830558]
 script = ExtResource("5_xvhxs")
 
-[node name="HurtBox" type="Area2D" parent="." unique_id=898934790]
-collision_layer = 4
-collision_mask = 8
-
-[node name="CollisionShape2D" type="CollisionShape2D" parent="HurtBox" unique_id=1680175856]
-position = Vector2(1, 3)
-shape = SubResource("CircleShape2D_4l3ov")
-
+[connection signal="area_entered" from="Hurtbox" to="." method="_on_hurtbox_area_entered"]
 [connection signal="timeout" from="Timers/BasicAttackCooldown" to="." method="_on_basic_attack_cooldown_timeout"]
 [connection signal="area_entered" from="HurtBox" to="." method="_on_hurt_box_area_entered"]

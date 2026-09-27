@@ -85,7 +85,8 @@ timepower2={
 
 [layer_names]
 
-2d_physics/layer_3="PlayerHitBox"
+2d_physics/layer_3="Player To Target"
+2d_physics/layer_4="Target To Player"
 
 [physics]
 
