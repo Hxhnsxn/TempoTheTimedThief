@@ -729,6 +729,8 @@ _data = {
 &"WallSlide": SubResource("Animation_q3ml6")
 }
 
+[sub_resource type="CircleShape2D" id="CircleShape2D_4l3ov"]
+
 [node name="Player" type="CharacterBody2D" unique_id=1102362985]
 script = ExtResource("1_s027a")
 
@@ -741,6 +743,10 @@ editor_description = "The player's collision shape."
 position = Vector2(0, 4)
 shape = SubResource("CapsuleShape2D_hfphn")
 debug_color = Color(1, 1, 0, 0.41960785)
+
+[node name="Sprite2D" type="Sprite2D" parent="." unique_id=2139937811]
+position = Vector2(0, -24)
+texture = ExtResource("2_xo733")
 
 [node name="CrouchHurtbox" type="CollisionShape2D" parent="." unique_id=373991943]
 position = Vector2(0, 9)
@@ -799,3 +805,4 @@ script = ExtResource("5_xvhxs")
 
 [connection signal="area_entered" from="Hurtbox" to="." method="_on_hurtbox_area_entered"]
 [connection signal="timeout" from="Timers/BasicAttackCooldown" to="." method="_on_basic_attack_cooldown_timeout"]
+[connection signal="area_entered" from="HurtBox" to="." method="_on_hurt_box_area_entered"]
