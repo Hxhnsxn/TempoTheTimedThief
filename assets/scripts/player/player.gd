@@ -196,8 +196,6 @@ func _physics_process(delta: float) -> void:
 			animation_player.play("FallBeta")
 	if is_on_wall_only() and velocity.y > 0 and direction != 0:
 		animation_player.play("WallSlide")
-
-
 	
 	
 #============================================================================
@@ -205,8 +203,6 @@ func _physics_process(delta: float) -> void:
 #============================================================================
 
 func sprite_flip():
-	#animation_tree.set("parameters/Move/blend_position", direction)
-	
 	# Logic to reverse sprite based on x direction.
 	# Tempo's sprites face right by default.
 	# Also, this reverse the position of the attack hitbox to match
@@ -224,10 +220,24 @@ func sprite_flip():
 		if sign(walljump_raycast.scale.x) == 1:
 			walljump_raycast.scale.x *= -1
 		
-# After finishing the attack animation, return normal controls.
+#============================================================================
+#============================================================================
+#============================================================================
+		
+# After finishing an attack animation, return normal controls.
 func _on_animation_player_animation_finished(animation: StringName) -> void:
 	if animation == "Attack":
 		is_attacking = false
 		# When the basic attack cooldown timer is up,
 		# the player can perform a basic attack again.
 		$Timers/BasicAttackCooldown.start()
+		
+#============================================================================
+#============================================================================
+#============================================================================
+
+func enter_slow_zone() -> void:
+	print("HI!")
+func exit_slow_zone() -> void:	
+	print("BYE!")
+	

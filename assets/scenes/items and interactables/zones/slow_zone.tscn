@@ -1,0 +1,9 @@
+[gd_scene format=3 uid="uid://bhw4n2ujewlqb"]
+
+[ext_resource type="Script" uid="uid://cashulrwnj2xx" path="res://assets/scripts/items and interactables/slow_zone.gd" id="1_ipk58"]
+
+[node name="SlowZone" type="Area2D" unique_id=1728993175]
+script = ExtResource("1_ipk58")
+
+[connection signal="body_entered" from="." to="." method="_on_body_entered"]
+[connection signal="body_exited" from="." to="." method="_on_body_exited"]
