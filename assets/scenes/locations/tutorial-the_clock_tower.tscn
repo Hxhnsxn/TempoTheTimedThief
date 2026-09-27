@@ -16,6 +16,7 @@
 [ext_resource type="PackedScene" uid="uid://be5rj117wlehy" path="res://assets/scenes/items and interactables/treasure/small_chest.tscn" id="12_v4ram"]
 [ext_resource type="PackedScene" uid="uid://d3xqegya7ip7y" path="res://assets/scenes/enemies/blip.tscn" id="13_b1n4a"]
 [ext_resource type="PackedScene" uid="uid://bhw4n2ujewlqb" path="res://assets/scenes/items and interactables/zones/slow_zone.tscn" id="15_452m6"]
+[ext_resource type="PackedScene" uid="uid://bqx63s0ie5bp7" path="res://assets/scenes/enemies/damage_area.tscn" id="16_nmr50"]
 
 [sub_resource type="AtlasTexture" id="AtlasTexture_f7kk0"]
 atlas = ExtResource("1_wjfwt")
@@ -326,6 +327,9 @@ size = Vector2(32, 32)
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_ysy5o"]
 size = Vector2(128, 7)
 
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_ccj0v"]
+size = Vector2(16, 16)
+
 [node name="TutorialTheClockTower" type="Node2D" unique_id=960022459]
 
 [node name="ParallaxBG" type="Node2D" parent="." unique_id=799293462]
@@ -474,6 +478,9 @@ position = Vector2(2569, 313)
 [node name="Blip" parent="Enemies" unique_id=134670485 instance=ExtResource("13_b1n4a")]
 position = Vector2(2324, 233)
 
+[node name="Blip3" parent="Enemies" unique_id=1194197049 instance=ExtResource("13_b1n4a")]
+position = Vector2(2303, -103)
+
 [node name="SlowZones" type="Node2D" parent="." unique_id=1076231317]
 
 [node name="SlowZone" parent="SlowZones" unique_id=1728993175 instance=ExtResource("15_452m6")]
@@ -483,5 +490,14 @@ position = Vector2(2347, -91.5)
 shape = SubResource("RectangleShape2D_ysy5o")
 debug_color = Color(0.8907457, 0.82503855, 1, 0.41960785)
 
+[node name="DamageAreas" type="Node2D" parent="." unique_id=560437816]
+
+[node name="DamageArea" parent="DamageAreas" unique_id=633864572 instance=ExtResource("16_nmr50")]
+position = Vector2(2409, 121)
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="DamageAreas/DamageArea" unique_id=779739284]
+position = Vector2(138, 163)
+shape = SubResource("RectangleShape2D_ccj0v")
+
 [node name="Player" parent="." unique_id=1102362985 instance=ExtResource("2_tgljw")]
-position = Vector2(2130, 212)
+position = Vector2(2497, 308)

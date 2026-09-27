@@ -2,6 +2,7 @@
 
 [ext_resource type="Script" uid="uid://dhoxmyyj2nfuw" path="res://assets/scripts/enemies/basic_enemy.gd" id="1_u5gsn"]
 [ext_resource type="Texture2D" uid="uid://cufio4i8vk8tu" path="res://assets/sprites/enemies/Blip/Blip.png" id="2_yjkxp"]
+[ext_resource type="PackedScene" uid="uid://bqx63s0ie5bp7" path="res://assets/scenes/enemies/damage_area.tscn" id="3_w0jdn"]
 
 [sub_resource type="AtlasTexture" id="AtlasTexture_w0jdn"]
 atlas = ExtResource("2_yjkxp")
@@ -56,6 +57,9 @@ animations = [{
 [sub_resource type="CircleShape2D" id="CircleShape2D_3qnfo"]
 radius = 11.0
 
+[sub_resource type="CircleShape2D" id="CircleShape2D_w0jdn"]
+radius = 13.0
+
 [node name="Blip" type="CharacterBody2D" unique_id=134670485]
 script = ExtResource("1_u5gsn")
 
@@ -78,3 +82,9 @@ target_position = Vector2(12, 15)
 
 [node name="RayCastLeftDown" type="RayCast2D" parent="." unique_id=1382140604]
 target_position = Vector2(-12, 15)
+
+[node name="DamageArea" parent="." unique_id=633864572 instance=ExtResource("3_w0jdn")]
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="DamageArea" unique_id=926788514]
+shape = SubResource("CircleShape2D_w0jdn")
+debug_color = Color(0.9894332, 0, 0.2959387, 0.41960785)
