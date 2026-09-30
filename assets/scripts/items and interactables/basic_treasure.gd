@@ -2,8 +2,13 @@ extends CharacterBody2D
 class_name BasicTreasure
 
 @onready var animated_sprite: AnimatedSprite2D = $AnimatedSprite2D
+# Variable to indicate whether or not the treasure spawned
+# from opening a chest.
 @onready var chestspawn: bool = false
 @onready var spawning: bool
+
+# HUD
+@onready var hud: Control = $"../../../CanvasLayer/HUD"
 
 # Gravity.
 var gravity = ProjectSettings.get_setting("physics/2d/default_gravity")
@@ -33,6 +38,9 @@ func _ready() -> void:
 # This makes the distinction between chest-spawned treasure
 # and floating treasure.
 func _physics_process(delta: float) -> void:
+	# For chestspawn.
+	if chestspawn == true:
+		print("CHEST SPAWN")
 	#if not is_on_floor() and spawning == true:
 		#velocity.y = -5
 		#velocity.x = randf_range(-15, 15)
@@ -41,19 +49,25 @@ func _physics_process(delta: float) -> void:
 		#velocity.y += gravity / 400
 	move_and_slide()
 
-func _on_collisions_body_entered(body: Node2D) -> void:
+func _on_pick_up_body_entered(body: Node2D) -> void:
 	if body.name == "Player":
 		# INCREASE TREASURE CURRENCY COUNT HERE!
 		if $AnimatedSprite2D.frame == 0:
+			hud.temp_treasure += 1
 			print("+1 treasure")
 		elif $AnimatedSprite2D.frame == 1:
+			hud.temp_treasure += 5
 			print("+5 treasure")
 		elif $AnimatedSprite2D.frame == 2:
+			hud.temp_treasure += 10
 			print("+10 treasure")
 		elif $AnimatedSprite2D.frame == 3:
+			hud.temp_treasure += 20
 			print("+20 treasure")
 		elif $AnimatedSprite2D.frame == 4:
+			hud.temp_treasure += 50
 			print("+50 treasure")
 		elif $AnimatedSprite2D.frame == 5:
+			hud.temp_treasure += 100
 			print("+100 treasure")
 		queue_free()

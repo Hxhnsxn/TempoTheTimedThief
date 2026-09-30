@@ -1,8 +1,15 @@
 [gd_scene format=3 uid="uid://d3xqegya7ip7y"]
 
 [ext_resource type="Script" uid="uid://dhoxmyyj2nfuw" path="res://assets/scripts/enemies/basic_enemy.gd" id="1_u5gsn"]
+[ext_resource type="Shader" uid="uid://buywtbw2ajaof" path="res://assets/miscellaneous/shaders/hitflash.tres" id="2_tapp8"]
 [ext_resource type="Texture2D" uid="uid://cufio4i8vk8tu" path="res://assets/sprites/enemies/Blip/Blip.png" id="2_yjkxp"]
 [ext_resource type="PackedScene" uid="uid://bqx63s0ie5bp7" path="res://assets/scenes/enemies/damage_area.tscn" id="3_w0jdn"]
+
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_nr0we"]
+resource_local_to_scene = true
+shader = ExtResource("2_tapp8")
+shader_parameter/Enabled = false
+shader_parameter/Tint = Color(1, 1, 1, 1)
 
 [sub_resource type="AtlasTexture" id="AtlasTexture_w0jdn"]
 atlas = ExtResource("2_yjkxp")
@@ -58,12 +65,50 @@ animations = [{
 radius = 11.0
 
 [sub_resource type="CircleShape2D" id="CircleShape2D_w0jdn"]
-radius = 13.0
+radius = 14.0
+
+[sub_resource type="Animation" id="Animation_tapp8"]
+resource_name = "Hit Flash"
+length = 0.1
+tracks/0/type = "value"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath("AnimatedSprite2D:material:shader_parameter/Enabled")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/keys = {
+"times": PackedFloat32Array(0, 0.1),
+"transitions": PackedFloat32Array(1, 1),
+"update": 1,
+"values": [true, false]
+}
+
+[sub_resource type="Animation" id="Animation_nr0we"]
+length = 0.001
+tracks/0/type = "value"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath("AnimatedSprite2D:material:shader_parameter/Enabled")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 1,
+"values": [false]
+}
+
+[sub_resource type="AnimationLibrary" id="AnimationLibrary_nr0we"]
+_data = {
+&"Hit Flash": SubResource("Animation_tapp8"),
+&"RESET": SubResource("Animation_nr0we")
+}
 
 [node name="Blip" type="CharacterBody2D" unique_id=134670485]
 script = ExtResource("1_u5gsn")
 
 [node name="AnimatedSprite2D" type="AnimatedSprite2D" parent="." unique_id=1010688620]
+material = SubResource("ShaderMaterial_nr0we")
 position = Vector2(0, -13)
 sprite_frames = SubResource("SpriteFrames_yjkxp")
 autoplay = "default"
@@ -84,7 +129,14 @@ target_position = Vector2(12, 15)
 target_position = Vector2(-12, 15)
 
 [node name="DamageArea" parent="." unique_id=633864572 instance=ExtResource("3_w0jdn")]
+collision_mask = 4
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="DamageArea" unique_id=926788514]
+position = Vector2(0, -3)
 shape = SubResource("CircleShape2D_w0jdn")
 debug_color = Color(0.9894332, 0, 0.2959387, 0.41960785)
+
+[node name="HitflashPlayer" type="AnimationPlayer" parent="." unique_id=415519707]
+libraries/ = SubResource("AnimationLibrary_nr0we")
+
+[connection signal="area_entered" from="DamageArea" to="." method="_on_damage_area_area_entered"]

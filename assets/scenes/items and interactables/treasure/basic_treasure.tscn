@@ -57,16 +57,18 @@ animations = [{
 radius = 2.236068
 
 [node name="BasicTreasure" type="CharacterBody2D" unique_id=1839270639]
+collision_layer = 0
 script = ExtResource("1_5on6c")
 
 [node name="AnimatedSprite2D" type="AnimatedSprite2D" parent="." unique_id=587964224]
 sprite_frames = SubResource("SpriteFrames_hfphn")
 frame = 5
 
-[node name="Collisions" type="Area2D" parent="." unique_id=1230416676]
+[node name="PickUp" type="Area2D" parent="." unique_id=1230416676]
 
-[node name="CollisionShape2D" type="CollisionShape2D" parent="Collisions" unique_id=2087140428]
+[node name="CollisionShape2D" type="CollisionShape2D" parent="PickUp" unique_id=2087140428]
 position = Vector2(0, 6)
 shape = SubResource("CircleShape2D_hfphn")
 
-[connection signal="body_entered" from="Collisions" to="." method="_on_collisions_body_entered"]
+[connection signal="body_entered" from="PickUp" to="." method="_on_collisions_body_entered"]
+[connection signal="body_entered" from="PickUp" to="." method="_on_pick_up_body_entered"]

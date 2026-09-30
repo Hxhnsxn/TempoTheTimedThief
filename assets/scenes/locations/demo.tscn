@@ -1,8 +1,7 @@
 [gd_scene format=4 uid="uid://bt33rk1tbh60q"]
 
-[ext_resource type="Texture2D" uid="uid://dilcy28u43j5l" path="res://assets/sprites/tilesets/Tileset.png" id="1_rqcbg"]
+[ext_resource type="Texture2D" uid="uid://cwk1pyg1q2jj0" path="res://assets/sprites/tilesets/Tileset (Clock Tower).png" id="1_rqcbg"]
 [ext_resource type="PackedScene" uid="uid://dt408k2a66tfs" path="res://assets/scenes/player/player.tscn" id="2_4f22x"]
-[ext_resource type="PackedScene" uid="uid://be5rj117wlehy" path="res://assets/scenes/items and interactables/treasure/small_chest.tscn" id="3_4f22x"]
 [ext_resource type="PackedScene" uid="uid://cs1lk5kwrp06i" path="res://assets/scenes/ui/leveltimer.tscn" id="4_3n7n4"]
 
 [sub_resource type="TileSetAtlasSource" id="TileSetAtlasSource_4f22x"]
@@ -101,28 +100,6 @@ tile_set = SubResource("TileSet_ysy5o")
 
 [node name="Player" parent="." unique_id=1102362985 instance=ExtResource("2_4f22x")]
 position = Vector2(-106, -16)
-
-[node name="Small Chest" parent="." unique_id=1281172731 instance=ExtResource("3_4f22x")]
-visible = false
-position = Vector2(203, 36)
-
-[node name="Small Chest2" parent="." unique_id=473766070 instance=ExtResource("3_4f22x")]
-visible = false
-position = Vector2(268, 100)
-
-[node name="Small Chest3" parent="." unique_id=241165914 instance=ExtResource("3_4f22x")]
-visible = false
-position = Vector2(-41, -124)
-scale = Vector2(-1, 1)
-
-[node name="Small Chest4" parent="." unique_id=1733867641 instance=ExtResource("3_4f22x")]
-visible = false
-position = Vector2(477, 4)
-
-[node name="Small Chest5" parent="." unique_id=9751943 instance=ExtResource("3_4f22x")]
-visible = false
-position = Vector2(-90, 148)
-scale = Vector2(-1, 1)
 
 [node name="CanvasLayer" type="CanvasLayer" parent="." unique_id=1824454468]
 

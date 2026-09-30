@@ -10,41 +10,50 @@ const SLIDESPEED = 500.0		# Sliding movement speed. (Not entirely sure why this 
 const DIVESPEED = 550.0			# Diving movement speed (see above)
 const CRAWLSPEED = 120.0		# Crawling movement speed.
 const MOVESPEED = 200.0			# Normal movement speed.
+
 const JUMP_VELOCITY = -270.0	# Normal jump velocity.
 
 const ACCEL = 0.15
 const FRICTION = 0.3
+# This variable changes based on certain zones. Default 1.
+# Ex. A slow zone should have this factor set to 0.5.
+var SPEEDFACTOR = 1
 
 var is_crouching: bool = false  # Checks if the player is crouching.
 var is_attacking: bool = false	# Checks if the player is attacking.
 var is_sliding: bool = false    # Checks if the player is sliding.
 
-#@onready var state_machine: StateMachine = $StateMachine
 
 @onready var sprite: Sprite2D = $Sprite2D
 @onready var animation_player: AnimationPlayer = $AnimationPlayer
-#@onready var animation_tree: AnimationTree = $AnimationTree
-
+#================HITFLASH SHADER================
+# AnimationPlayer for a shader that indicates a flash of color when
+# Tempo takes damage.
+@onready var hitflash_player: AnimationPlayer = $HitflashPlayer
+#================COYOTE TIME================
 @onready var coyote_timer: Timer = $Timers/CoyoteTimer
 # Variable that checks if coyote time is relevant and available.
 var coyote_time_active: bool = false
-
+#================WALL JUMP================
 @onready var walljump_raycast: RayCast2D = $WallJumpRayCast
 var walljump_force: float = 500
-
+#================UNCROUCH CHECK================
 @onready var uncrouchcheck_raycast: RayCast2D = $UncrouchCheckRayCast
-
-# Reference to collision boxes.
+#================COLLISION BOXES================
 @onready var collisionbox: CollisionShape2D = $PlayerCollisionBox
-@onready var crouchhurtbox: CollisionShape2D = $CrouchHurtbox
-
-# References to attack hitbox.
+@onready var crouchcollisionbox: CollisionShape2D = $CrouchCollisionBox
+#================HITBOXES & HURTBOXES================
 @onready var hitbox: CollisionShape2D = $Attack/AttackHitbox
 @onready var hurtbox: CollisionShape2D = $Hurtbox/PlayerHurtbox
+#================VISUAL EFFECTS================
+@onready var fx1 :AnimatedSprite2D = $VisualEffects/FX1
 #============================================================================
 
 func _ready():
 	animation_player.animation_finished.connect(_on_animation_player_animation_finished)
+	
+	fx1.visible = false
+	
 	
 	curr_health = 100
 	pass
@@ -86,13 +95,13 @@ func _physics_process(delta: float) -> void:
 		):
 		is_crouching = false
 	if is_crouching:
-		speed = CRAWLSPEED
+		speed = CRAWLSPEED * SPEEDFACTOR
 		collisionbox.disabled = true
-		crouchhurtbox.disabled = false
+		crouchcollisionbox.disabled = false
 	else:
-		speed = MOVESPEED
+		speed = MOVESPEED * SPEEDFACTOR
 		collisionbox.disabled = false
-		crouchhurtbox.disabled = true
+		crouchcollisionbox.disabled = true
 		
 	# Coyote time logic.
 	if is_on_floor():
@@ -125,7 +134,7 @@ func _physics_process(delta: float) -> void:
 		):
 		velocity.y = JUMP_VELOCITY / 4
 	
-	#WALL JUMP
+	# WALL JUMP=================================================
 	if (
 		is_on_wall_only()
 		and direction != 0
@@ -183,7 +192,7 @@ func _physics_process(delta: float) -> void:
 				animation_player.play("Idle")
 	
 	#=================================================
-	#Moved physics before animation to fix small visual jank
+	# Moved physics before animation to fix small visual jank
 	move_and_slide()
 	sprite_flip()
 				
@@ -205,10 +214,22 @@ func _physics_process(delta: float) -> void:
 #============================================================================
 #============================================================================
 
+func _process(delta: float) -> void:
+	# When the invulnerability period after taking damage has finished
+	# (ex. the timer for it is up), restore hurtbox.
+	if $Timers/HurtCooldown.time_left > 0:
+		hurtbox.disabled = true
+	else:
+		hurtbox.disabled = false
+
+#============================================================================
+#============================================================================
+#============================================================================
+
 func sprite_flip():
 	# Logic to reverse sprite based on x direction.
 	# Tempo's sprites face right by default.
-	# Also, this reverse the position of the attack hitbox to match
+	# Also, this reverses the position of the attack hitbox to match
 	# the direction Tempo is facing.
 	if direction > 0:
 		sprite.flip_h = false
@@ -239,26 +260,49 @@ func _on_animation_player_animation_finished(animation: StringName) -> void:
 #============================================================================
 #============================================================================
 
+# When an enemy/hazard attack hitbox enters Tempo's hurtbox,
+# Tempo's timer loses seconds,
+# and he gets knocked back a bit.
 func _on_hurtbox_area_entered(area: Area2D) -> void:
 	if area is damageArea:
-		print("OI!")
-		animation_player.play("Damaged")
-		take_damage(area.damage, area.global_position, area.knock_force)
+		if hurtbox.disabled == false:
+			
+			take_damage(area.damage, area.global_position, area.knock_force)
 	
 func take_damage(amount: int, hazard_pos: Vector2, knockback: float) -> void:
 	curr_health -= amount
 	print("Taking damage")
-	var knock_dir: Vector2 = (global_position - hazard_pos).normalized()
-
-	velocity = knock_dir * knockback
+	#sanimation_player.play("Damaged")
+	
+	# If the attack causes Tempo's timer to reach 0, death is imminent.
 	if curr_health <= 0:
 		die()
+	# Otherwise, knock Tempo back and start a timer.
+	# Tempo will have invincibility frames that disable his hurtbox.
+	# Then, when the timer is finished, restore Tempo's hurtbox.
+	else:
+		var knock_dir: Vector2 = (global_position - hazard_pos).normalized()
+		hitflash_player.play("Hit Flash")
+		velocity = knock_dir * knockback
+		$Timers/HurtCooldown.start()
+		
+
+
 
 func die() -> void:
 	queue_free()
 
+#============================================================================
+#============================================================================
+#============================================================================
 
+# Upon entering a slow zone hazard, Tempo's movement speeed should be
+# decreased. Upon exiting, return to normal.
 func enter_slow_zone() -> void:
-	print("hi")
+	SPEEDFACTOR = 0.35
+	fx1.visible = true
+	#print("Entered slow zone.")
 func exit_slow_zone() -> void:	
-	print("bye")
+	SPEEDFACTOR = 1
+	fx1.visible = false
+	#print("Exited slow zone.")
