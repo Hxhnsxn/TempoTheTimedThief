@@ -1,6 +1,8 @@
 extends CharacterBody2D
 
 #============================================================================
+#==================VARIABLES=================================================
+#============================================================================
 
 var speed = 200.0
 var direction: float = 0.0
@@ -21,6 +23,7 @@ var SPEEDFACTOR = 1
 
 var is_crouching: bool = false  # Checks if the player is crouching.
 var is_attacking: bool = false	# Checks if the player is attacking.
+var is_damaged: bool = false	# Checks if the player is damaged.
 var is_sliding: bool = false    # Checks if the player is sliding.
 
 
@@ -47,22 +50,29 @@ var walljump_force: float = 500
 @onready var hurtbox: CollisionShape2D = $Hurtbox/PlayerHurtbox
 #================VISUAL EFFECTS================
 @onready var fx1 :AnimatedSprite2D = $VisualEffects/FX1
+
+#============================================================================
+#==================FUNCTIONS=================================================
 #============================================================================
 
+#================READY================
 func _ready():
+	# This helps detect when a player animation finishes.
 	animation_player.animation_finished.connect(_on_animation_player_animation_finished)
 	
+	# List of visual effects.
+	# Certain criteria may change these to true
+	# (ex. slow zone sets fx1 to true upon entering,
+	# then back to false upon exiting)
 	fx1.visible = false
 	
-	
 	curr_health = 100
-	pass
 	
-#============================================================================
-#============================================================================
-#============================================================================
-
+#================PHYSICS PROCESS================
 func _physics_process(delta: float) -> void:
+	
+	
+	
 	if not is_on_floor():
 		is_crouching = false				# Player can't crouch mid-air.
 		velocity += get_gravity() * delta	# Apply gravity when airborne.
@@ -71,12 +81,9 @@ func _physics_process(delta: float) -> void:
 			# tweak wall slide speed
 			velocity.y = clamp(velocity.y, -99999, 80)
 	
-	# Get the input direction
-	direction = Input.get_axis("move_left", "move_right")
-	
-	# CROUCH=================================================
-	# Toggle for if the player is pressing the crouch input while grounded.
-	
+
+#================CROUCH================
+	# The player can only crouch while grounded.
 	if Input.is_action_just_pressed("crouch"):
 		if is_on_floor():
 			if direction and (not is_crouching or abs(velocity.x) < CRAWLSPEED + 5.0):
@@ -87,7 +94,9 @@ func _physics_process(delta: float) -> void:
 			velocity.y = 300
 		
 	if (
-		# to make sliding slower or more committal you could make it so you dont stand up until you reach close to crawlspeed (minor buffers are because of lerp btw)
+		# to make sliding slower or more committal you
+		# could make it so you dont stand up until you reach
+		# close to crawlspeed (minor buffers are because of lerp btw)
 		not Input.is_action_pressed("crouch")
 		and is_on_floor()
 		and not uncrouchcheck_raycast.is_colliding()
@@ -103,19 +112,8 @@ func _physics_process(delta: float) -> void:
 		collisionbox.disabled = false
 		crouchcollisionbox.disabled = true
 		
-	# Coyote time logic.
-	if is_on_floor():
-		# If the player is grounded and the coyote time window is active,
-		# deactivate the coyote time window.
-		if coyote_time_active:
-			coyote_time_active = false
-			coyote_timer.stop()
-	else:
-		if not coyote_time_active:
-			coyote_time_active = true
-			coyote_timer.start()
-			
-	# JUMP=================================================
+		
+#================JUMP================
 	# If the player is attempting to jump, and they are
 	# either grounded or the coyote time window is still active,
 	# perform a jump.
@@ -127,14 +125,16 @@ func _physics_process(delta: float) -> void:
 		velocity.y = JUMP_VELOCITY
 		coyote_timer.stop()
 		coyote_time_active = true
-	# FALL=================================================
+		AudioManager.play_jump()
+#================FALL================
 	# Allows the player to perform short hops.
 	if (
 		Input.is_action_just_released("jump") and velocity.y < 0
 		):
 		velocity.y = JUMP_VELOCITY / 4
 	
-	# WALL JUMP=================================================
+#================WALL JUMP================
+# Only trigger when an x-direction is being held.
 	if (
 		is_on_wall_only()
 		and direction != 0
@@ -145,13 +145,27 @@ func _physics_process(delta: float) -> void:
 		velocity.y = JUMP_VELOCITY
 		velocity.x = -(walljump_raycast.scale.x) * walljump_force
 	
+#================COYOTE TIME================
+# If the player is grounded and the coyote time window is active,
+# deactivate the coyote time window.
+	if is_on_floor():
+		if coyote_time_active:
+			coyote_time_active = false
+			coyote_timer.stop()
+	else:
+		if not coyote_time_active:
+			coyote_time_active = true
+			coyote_timer.start()
 	
-	# ATTACK=================================================
+	
+	
+#================BASIC ATTACK================
+# A basic attack.
+# The player needs to not be already attacking,
+# not be crouching, not be airborne,
+# and the cooldown time on the basic attack needs to be finished.
 	if (
-		# A basic attack.
-		# The player needs to not be already attacking,
-		# not be crouching, not be airborne,
-		# and the cooldown time on the basic attack needs to be finished.
+		
 		Input.is_action_pressed("attack")
 		and not is_attacking
 		and not is_crouching
@@ -160,17 +174,22 @@ func _physics_process(delta: float) -> void:
 		):
 		is_attacking = true
 		animation_player.play("Attack")
+	# This line prevents the attack animation from being
+	# interrupted by anything else.
 	if is_attacking:
 		return
 	
-	# MOVE=================================================
+#================MOVE================
+# Input direction.
+	direction = Input.get_axis("move_left", "move_right")
+	
 	# handle the movement/deceleration.
 	if direction:
 		velocity.x = lerp(velocity.x, direction * speed, ACCEL)
 	else:
 		velocity.x = lerp(velocity.x, 0.0, FRICTION)
 	
-	# ANIMATIONS=================================================
+#================ANIMATIONS================
 	# If the player is grounded:
 	if is_on_floor():
 		# If the player is crouching:
@@ -209,11 +228,8 @@ func _physics_process(delta: float) -> void:
 			animation_player.play("FallBeta")
 	if is_on_wall_only() and velocity.y > 0 and direction != 0:
 		animation_player.play("WallSlide")
-
-#============================================================================
-#============================================================================
-#============================================================================
-
+		
+#================PROCESS================
 func _process(delta: float) -> void:
 	# When the invulnerability period after taking damage has finished
 	# (ex. the timer for it is up), restore hurtbox.
@@ -222,15 +238,12 @@ func _process(delta: float) -> void:
 	else:
 		hurtbox.disabled = false
 
-#============================================================================
-#============================================================================
-#============================================================================
-
+#================SPRITE FLIP================
+# Logic to reverse sprite based on x direction.
+# Tempo's sprites face right by default.
+# Also, this reverses the position of the attack hitbox to match
+# the direction Tempo is facing.
 func sprite_flip():
-	# Logic to reverse sprite based on x direction.
-	# Tempo's sprites face right by default.
-	# Also, this reverses the position of the attack hitbox to match
-	# the direction Tempo is facing.
 	if direction > 0:
 		sprite.flip_h = false
 		if sign(hitbox.position.x) == -1:
@@ -244,10 +257,7 @@ func sprite_flip():
 		if sign(walljump_raycast.scale.x) == 1:
 			walljump_raycast.scale.x *= -1
 		
-#============================================================================
-#============================================================================
-#============================================================================
-		
+#================FINISH ANIMATION================
 # After finishing an attack animation, return normal controls.
 func _on_animation_player_animation_finished(animation: StringName) -> void:
 	if animation == "Attack":
@@ -256,23 +266,29 @@ func _on_animation_player_animation_finished(animation: StringName) -> void:
 		# the player can perform a basic attack again.
 		$Timers/BasicAttackCooldown.start()
 		
-#============================================================================
-#============================================================================
-#============================================================================
+#================SLOW ZONE================
+# Upon entering a slow zone hazard, Tempo's movement speeed should be
+# decreased. Upon exiting, return to normal.
+func enter_slow_zone() -> void:
+	SPEEDFACTOR = 0.35
+	fx1.visible = true
+func exit_slow_zone() -> void:	
+	SPEEDFACTOR = 1
+	fx1.visible = false
 
+#================DAMAGE COLLISION================
 # When an enemy/hazard attack hitbox enters Tempo's hurtbox,
 # Tempo's timer loses seconds,
 # and he gets knocked back a bit.
 func _on_hurtbox_area_entered(area: Area2D) -> void:
 	if area is damageArea:
 		if hurtbox.disabled == false:
-			
 			take_damage(area.damage, area.global_position, area.knock_force)
 	
 func take_damage(amount: int, hazard_pos: Vector2, knockback: float) -> void:
 	curr_health -= amount
 	print("Taking damage")
-	#sanimation_player.play("Damaged")
+	#animation_player.play("Damaged")
 	
 	# If the attack causes Tempo's timer to reach 0, death is imminent.
 	if curr_health <= 0:
@@ -286,23 +302,6 @@ func take_damage(amount: int, hazard_pos: Vector2, knockback: float) -> void:
 		velocity = knock_dir * knockback
 		$Timers/HurtCooldown.start()
 		
-
-
-
+#================DEATH================
 func die() -> void:
 	queue_free()
-
-#============================================================================
-#============================================================================
-#============================================================================
-
-# Upon entering a slow zone hazard, Tempo's movement speeed should be
-# decreased. Upon exiting, return to normal.
-func enter_slow_zone() -> void:
-	SPEEDFACTOR = 0.35
-	fx1.visible = true
-	#print("Entered slow zone.")
-func exit_slow_zone() -> void:	
-	SPEEDFACTOR = 1
-	fx1.visible = false
-	#print("Exited slow zone.")

@@ -1,0 +1,71 @@
+[gd_scene format=3 uid="uid://c26bejmxwboep"]
+
+[ext_resource type="Script" uid="uid://crrir3y74rq5i" path="res://assets/scripts/enemies/sand shifter/sand_shifter_projectile.gd" id="1_72g0q"]
+[ext_resource type="Texture2D" uid="uid://d1epxq8wbmiod" path="res://assets/sprites/enemies/Sand Shifter/Sand Shifter Projectile.png" id="1_qd08f"]
+[ext_resource type="PackedScene" uid="uid://bqx63s0ie5bp7" path="res://assets/scenes/enemies/damage_area.tscn" id="2_8ndsm"]
+
+[sub_resource type="CircleShape2D" id="CircleShape2D_ysy5o"]
+radius = 7.0
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_8ndsm"]
+atlas = ExtResource("1_qd08f")
+region = Rect2(0, 0, 16, 16)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_72g0q"]
+atlas = ExtResource("1_qd08f")
+region = Rect2(16, 0, 16, 16)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_1leai"]
+atlas = ExtResource("1_qd08f")
+region = Rect2(32, 0, 16, 16)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_rkgn8"]
+atlas = ExtResource("1_qd08f")
+region = Rect2(48, 0, 16, 16)
+
+[sub_resource type="SpriteFrames" id="SpriteFrames_8ndsm"]
+animations = [{
+"frames": [{
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_8ndsm")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_72g0q")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_1leai")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_rkgn8")
+}],
+"loop": 1,
+"name": &"default",
+"speed": 15.0
+}]
+
+[sub_resource type="CircleShape2D" id="CircleShape2D_72g0q"]
+radius = 8.0
+
+[node name="SandShifterProjectile" type="CharacterBody2D" unique_id=599342407]
+script = ExtResource("1_72g0q")
+
+[node name="NormalCollisionBox" type="Area2D" parent="." unique_id=761131758]
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="NormalCollisionBox" unique_id=1420287409]
+shape = SubResource("CircleShape2D_ysy5o")
+
+[node name="AnimatedSprite2D" type="AnimatedSprite2D" parent="." unique_id=1490631273]
+sprite_frames = SubResource("SpriteFrames_8ndsm")
+autoplay = "default"
+
+[node name="DamageArea" parent="." unique_id=633864572 instance=ExtResource("2_8ndsm")]
+collision_mask = 4
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="DamageArea" unique_id=1489601980]
+shape = SubResource("CircleShape2D_72g0q")
+debug_color = Color(0.9882353, 0, 0.29411766, 0.41960785)
+
+[connection signal="area_entered" from="NormalCollisionBox" to="." method="_on_normal_collision_box_area_entered"]
+[connection signal="body_shape_entered" from="NormalCollisionBox" to="." method="_on_normal_collision_box_body_shape_entered"]
+[connection signal="area_entered" from="DamageArea" to="." method="_on_damage_area_area_entered"]
+[connection signal="body_entered" from="DamageArea" to="." method="_on_damage_area_body_entered"]

@@ -1,0 +1,16 @@
+[gd_scene format=3 uid="uid://mq8b6oh2egqf"]
+
+[ext_resource type="AudioStream" uid="uid://bgxxvqxli435h" path="res://assets/audio/sfx/jump.wav" id="1_jrcgf"]
+[ext_resource type="Script" uid="uid://bfsqqbfxvqi05" path="res://assets/scripts/audio/audio_manager.gd" id="1_ktabh"]
+
+[node name="AudioManager" type="Node2D" unique_id=1334757344]
+script = ExtResource("1_ktabh")
+
+[node name="Music" type="Node2D" parent="." unique_id=992806095]
+
+[node name="SFX" type="Node2D" parent="." unique_id=1627795973]
+
+[node name="PlayerJump" type="AudioStreamPlayer" parent="SFX" unique_id=157597719]
+stream = ExtResource("1_jrcgf")
+volume_db = -1.0
+pitch_scale = 1.5

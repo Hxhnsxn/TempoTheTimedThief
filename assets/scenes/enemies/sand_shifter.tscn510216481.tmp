@@ -1,0 +1,149 @@
+[gd_scene format=3 uid="uid://bin2yib1ypi0u"]
+
+[ext_resource type="Script" uid="uid://dyq354h6ytwio" path="res://assets/scripts/enemies/sand shifter/sand_shifter.gd" id="1_7du8f"]
+[ext_resource type="Texture2D" uid="uid://dgaexjqam22k" path="res://assets/sprites/enemies/Sand Shifter/Sand Shifter.png" id="1_ua6vj"]
+[ext_resource type="PackedScene" uid="uid://bqx63s0ie5bp7" path="res://assets/scenes/enemies/damage_area.tscn" id="2_u5gsn"]
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_7du8f"]
+size = Vector2(20, 25)
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_u5gsn"]
+size = Vector2(22, 27)
+
+[sub_resource type="Animation" id="Animation_58xqb"]
+resource_name = "Attack"
+length = 1.8
+step = 0.025
+tracks/0/type = "value"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath(".:frame")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 1,
+"values": [2]
+}
+tracks/1/type = "value"
+tracks/1/imported = false
+tracks/1/enabled = true
+tracks/1/path = NodePath(".:position")
+tracks/1/interp = 1
+tracks/1/loop_wrap = true
+tracks/1/keys = {
+"times": PackedFloat32Array(0, 0.025000036, 0.050000012, 0.07500011, 0.10000008, 0.12500006, 0.15000004, 0.17500013, 0.2000001, 0.22500008, 0.25000006, 0.27500015, 0.30000013, 0.3250001, 0.35000008, 0.37500018, 0.40000015, 0.42500013),
+"transitions": PackedFloat32Array(0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0),
+"update": 0,
+"values": [Vector2(-1, 0), Vector2(0, 0), Vector2(1, 0), Vector2(0, 0), Vector2(-1, 0), Vector2(0, 0), Vector2(1, 0), Vector2(0, 0), Vector2(-1, 0), Vector2(0, 0), Vector2(1, 0), Vector2(0, 0), Vector2(-1, 0), Vector2(0, 0), Vector2(1, 0), Vector2(0, 0), Vector2(-1, 0), Vector2(0, 0)]
+}
+
+[sub_resource type="Animation" id="Animation_4y3jy"]
+resource_name = "Setup"
+length = 1.9
+step = 0.025
+tracks/0/type = "value"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath(".:frame")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/keys = {
+"times": PackedFloat32Array(0, 1),
+"transitions": PackedFloat32Array(1, 1),
+"update": 1,
+"values": [0, 1]
+}
+tracks/1/type = "value"
+tracks/1/imported = false
+tracks/1/enabled = true
+tracks/1/path = NodePath("..:position")
+tracks/1/interp = 1
+tracks/1/loop_wrap = true
+tracks/1/keys = {
+"times": PackedFloat32Array(0, 1, 1.05, 1.1, 1.15, 1.2, 1.25, 1.3000001, 1.35, 1.4, 1.45, 1.5, 1.5500001, 1.6, 1.65, 1.7, 1.75, 1.8, 1.85),
+"transitions": PackedFloat32Array(0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0),
+"update": 0,
+"values": [Vector2(0, 0), Vector2(1, 0), Vector2(0, 0), Vector2(-1, 0), Vector2(0, 0), Vector2(1, 0), Vector2(0, 0), Vector2(-1, 0), Vector2(0, 0), Vector2(1, 0), Vector2(0, 0), Vector2(-1, 0), Vector2(0, 0), Vector2(1, 0), Vector2(0, 0), Vector2(-1, 0), Vector2(0, 0), Vector2(1, 0), Vector2(0, 0)]
+}
+
+[sub_resource type="Animation" id="Animation_7du8f"]
+length = 0.001
+tracks/0/type = "value"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath(".:frame")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 1,
+"values": [0]
+}
+tracks/1/type = "value"
+tracks/1/imported = false
+tracks/1/enabled = true
+tracks/1/path = NodePath(".:position")
+tracks/1/interp = 1
+tracks/1/loop_wrap = true
+tracks/1/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 0,
+"values": [Vector2(0, 0)]
+}
+
+[sub_resource type="AnimationLibrary" id="AnimationLibrary_58xqb"]
+_data = {
+&"Attack": SubResource("Animation_58xqb"),
+&"Idle": SubResource("Animation_4y3jy"),
+&"RESET": SubResource("Animation_7du8f")
+}
+
+[sub_resource type="Animation" id="Animation_tapp8"]
+resource_name = "Hit Flash"
+length = 0.1
+
+[sub_resource type="Animation" id="Animation_nr0we"]
+length = 0.001
+
+[sub_resource type="AnimationLibrary" id="AnimationLibrary_0tyev"]
+_data = {
+&"Hit Flash": SubResource("Animation_tapp8"),
+&"RESET": SubResource("Animation_nr0we")
+}
+
+[node name="SandShifter" type="CharacterBody2D" unique_id=2012990858]
+script = ExtResource("1_7du8f")
+
+[node name="Sprite2D" type="Sprite2D" parent="." unique_id=1855195553]
+texture = ExtResource("1_ua6vj")
+hframes = 3
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="." unique_id=1689508226]
+position = Vector2(0, -0.5)
+shape = SubResource("RectangleShape2D_7du8f")
+
+[node name="DamageArea" parent="." unique_id=633864572 instance=ExtResource("2_u5gsn")]
+collision_mask = 4
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="DamageArea" unique_id=1599833914]
+position = Vector2(0, -0.5)
+shape = SubResource("RectangleShape2D_u5gsn")
+debug_color = Color(0.9882353, 0, 0.29411766, 0.41960785)
+
+[node name="AnimationPlayer" type="AnimationPlayer" parent="." unique_id=556080160]
+root_node = NodePath("../Sprite2D")
+libraries/ = SubResource("AnimationLibrary_58xqb")
+
+[node name="HitflashPlayer" type="AnimationPlayer" parent="." unique_id=1030021810]
+libraries/ = SubResource("AnimationLibrary_0tyev")
+
+[node name="AttackCooldownTimer" type="Timer" parent="." unique_id=585876626]
+wait_time = 3.0
+one_shot = true
+
+[connection signal="area_entered" from="DamageArea" to="." method="_on_damage_area_area_entered"]
+[connection signal="timeout" from="AttackCooldownTimer" to="." method="_on_attack_cooldown_timer_timeout"]
