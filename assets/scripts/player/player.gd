@@ -84,8 +84,6 @@ func _physics_process(delta: float) -> void:
 	# The player can only crouch while grounded.
 	if Input.is_action_just_pressed("crouch"):
 		if is_on_floor():
-			if direction and (not is_crouching or abs(velocity.x) < CRAWLSPEED + 5.0):
-				velocity.x = SLIDESPEED * direction
 			is_crouching = true
 		else:
 			velocity.x = DIVESPEED * direction
@@ -105,6 +103,7 @@ func _physics_process(delta: float) -> void:
 		speed = CRAWLSPEED * SPEEDFACTOR
 		collisionbox.disabled = true
 		crouchcollisionbox.disabled = false
+		
 	else:
 		speed = MOVESPEED * SPEEDFACTOR
 		collisionbox.disabled = false
@@ -123,6 +122,10 @@ func _physics_process(delta: float) -> void:
 		coyote_timer.stop()
 		coyote_time_active = true
 		AudioManager.play_jump()
+	#slide controls
+	if Input.is_action_just_pressed("jump") and is_crouching:
+		if direction and abs(velocity.x) < CRAWLSPEED + 5.0:
+			velocity.x = SLIDESPEED * direction
 		
 #================FALL================
 	# Allows the player to perform short hops.
