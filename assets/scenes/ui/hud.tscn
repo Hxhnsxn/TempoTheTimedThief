@@ -2,6 +2,7 @@
 
 [ext_resource type="Script" uid="uid://c51eespmx4csm" path="res://assets/scripts/ui/hud.gd" id="1_1m4ne"]
 [ext_resource type="Texture2D" uid="uid://b1bn37i0kxmul" path="res://assets/sprites/ui/HUD Icons.png" id="1_7fvg5"]
+[ext_resource type="PackedScene" uid="uid://cs1lk5kwrp06i" path="res://assets/scenes/ui/leveltimer.tscn" id="2_jpjck"]
 
 [node name="HUD" type="Control" unique_id=1669747353]
 layout_mode = 3
@@ -12,12 +13,17 @@ grow_horizontal = 2
 grow_vertical = 2
 script = ExtResource("1_1m4ne")
 
+[node name="Level Timer" parent="." unique_id=929770682 instance=ExtResource("2_jpjck")]
+position = Vector2(576, 96)
+scale = Vector2(3, 3)
+
 [node name="VBoxContainer" type="VBoxContainer" parent="." unique_id=1641665706]
 layout_mode = 0
-offset_left = 48.0
-offset_top = 41.0
-offset_right = 182.0
-offset_bottom = 196.0
+offset_left = 42.0
+offset_top = 62.000004
+offset_right = 42.0
+offset_bottom = 102.0
+scale = Vector2(0.9, 0.9)
 
 [node name="Treasure" type="Control" parent="VBoxContainer" unique_id=1464377729]
 layout_mode = 2

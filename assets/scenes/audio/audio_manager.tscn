@@ -1,7 +1,8 @@
 [gd_scene format=3 uid="uid://mq8b6oh2egqf"]
 
-[ext_resource type="AudioStream" uid="uid://bgxxvqxli435h" path="res://assets/audio/sfx/jump.wav" id="1_jrcgf"]
+[ext_resource type="AudioStream" uid="uid://bsvyghl0yggag" path="res://assets/audio/sfx/jump.wav" id="1_jrcgf"]
 [ext_resource type="Script" uid="uid://bfsqqbfxvqi05" path="res://assets/scripts/audio/audio_manager.gd" id="1_ktabh"]
+[ext_resource type="AudioStream" uid="uid://dtd1jik2yxpe" path="res://assets/audio/sfx/attack.wav" id="3_n51xk"]
 
 [node name="AudioManager" type="Node2D" unique_id=1334757344]
 script = ExtResource("1_ktabh")
@@ -12,5 +13,8 @@ script = ExtResource("1_ktabh")
 
 [node name="PlayerJump" type="AudioStreamPlayer" parent="SFX" unique_id=157597719]
 stream = ExtResource("1_jrcgf")
-volume_db = -1.0
-pitch_scale = 1.5
+volume_db = -7.0
+pitch_scale = 5.0
+
+[node name="PlayerAttack" type="AudioStreamPlayer" parent="SFX" unique_id=238956902]
+stream = ExtResource("3_n51xk")

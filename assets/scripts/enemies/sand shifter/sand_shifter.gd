@@ -1,4 +1,5 @@
 extends CharacterBody2D
+class_name SandShifter
 
 var health: int = 3
 
@@ -18,17 +19,16 @@ func _process(delta: float) -> void:
 
 # After the first timer ends, Sand Shifter attacks.
 func _on_timer_1_timeout() -> void:
-	print("Time 1 up, Time 2 start")
 	animation_player.play("Attack")
 	shoot()
 	timer2.start()
 	
+# After the second timer ends, Sand Shifter goes on cooldown.
 func _on_timer_2_timeout() -> void:
-	print("Time 2 up, Time 1 start")
 	animation_player.play("Idle")
 	timer1.start()
 
-
+# Sand Shifter shifts itself.
 func shoot() -> void:
 	var sand_ball = projectile.instantiate()
 	sand_ball.position = global_position + Vector2(0, 15)

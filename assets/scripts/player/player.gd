@@ -71,16 +71,14 @@ func _ready():
 #================PHYSICS PROCESS================
 func _physics_process(delta: float) -> void:
 	
-	
-	
+	# Gravity and wall slide.
 	if not is_on_floor():
-		is_crouching = false				# Player can't crouch mid-air.
-		velocity += get_gravity() * delta	# Apply gravity when airborne.
+		is_crouching = false				
+		velocity += get_gravity() * delta
 		# if wall sliding
 		if is_on_wall_only() and direction != 0:
 			# tweak wall slide speed
 			velocity.y = clamp(velocity.y, -99999, 80)
-	
 
 #================CROUCH================
 	# The player can only crouch while grounded.
@@ -112,7 +110,6 @@ func _physics_process(delta: float) -> void:
 		collisionbox.disabled = false
 		crouchcollisionbox.disabled = true
 		
-		
 #================JUMP================
 	# If the player is attempting to jump, and they are
 	# either grounded or the coyote time window is still active,
@@ -126,6 +123,7 @@ func _physics_process(delta: float) -> void:
 		coyote_timer.stop()
 		coyote_time_active = true
 		AudioManager.play_jump()
+		
 #================FALL================
 	# Allows the player to perform short hops.
 	if (
@@ -156,16 +154,13 @@ func _physics_process(delta: float) -> void:
 		if not coyote_time_active:
 			coyote_time_active = true
 			coyote_timer.start()
-	
-	
-	
+
 #================BASIC ATTACK================
 # A basic attack.
 # The player needs to not be already attacking,
 # not be crouching, not be airborne,
 # and the cooldown time on the basic attack needs to be finished.
 	if (
-		
 		Input.is_action_pressed("attack")
 		and not is_attacking
 		and not is_crouching
@@ -174,6 +169,7 @@ func _physics_process(delta: float) -> void:
 		):
 		is_attacking = true
 		animation_player.play("Attack")
+		AudioManager.play_attack()
 	# This line prevents the attack animation from being
 	# interrupted by anything else.
 	if is_attacking:
@@ -183,7 +179,7 @@ func _physics_process(delta: float) -> void:
 # Input direction.
 	direction = Input.get_axis("move_left", "move_right")
 	
-	# handle the movement/deceleration.
+	# Handle the movement/deceleration.
 	if direction:
 		velocity.x = lerp(velocity.x, direction * speed, ACCEL)
 	else:
@@ -276,6 +272,7 @@ func exit_slow_zone() -> void:
 	SPEEDFACTOR = 1
 	fx1.visible = false
 
+
 #================DAMAGE COLLISION================
 # When an enemy/hazard attack hitbox enters Tempo's hurtbox,
 # Tempo's timer loses seconds,
@@ -287,8 +284,8 @@ func _on_hurtbox_area_entered(area: Area2D) -> void:
 	
 func take_damage(amount: int, hazard_pos: Vector2, knockback: float) -> void:
 	curr_health -= amount
-	print("Taking damage")
-	#animation_player.play("Damaged")
+	
+	
 	
 	# If the attack causes Tempo's timer to reach 0, death is imminent.
 	if curr_health <= 0:
@@ -298,8 +295,10 @@ func take_damage(amount: int, hazard_pos: Vector2, knockback: float) -> void:
 	# Then, when the timer is finished, restore Tempo's hurtbox.
 	else:
 		var knock_dir: Vector2 = (global_position - hazard_pos).normalized()
-		hitflash_player.play("Hit Flash")
 		velocity = knock_dir * knockback
+		
+		hitflash_player.play("Hit Flash")
+		
 		$Timers/HurtCooldown.start()
 		
 #================DEATH================

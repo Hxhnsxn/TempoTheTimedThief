@@ -1,0 +1,16 @@
+[gd_scene format=3 uid="uid://dtec0gph3c4aa"]
+
+[ext_resource type="Texture2D" uid="uid://ctstrxabln18n" path="res://assets/sprites/items and interactables/spikes/Spike.png" id="1_wwxua"]
+[ext_resource type="PackedScene" uid="uid://bqx63s0ie5bp7" path="res://assets/scenes/enemies/damage_area.tscn" id="2_psguu"]
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_hfphn"]
+size = Vector2(16, 16)
+
+[node name="Spikes" type="Sprite2D" unique_id=1804495782]
+texture = ExtResource("1_wwxua")
+
+[node name="DamageArea" parent="." unique_id=633864572 instance=ExtResource("2_psguu")]
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="DamageArea" unique_id=1626941421]
+shape = SubResource("RectangleShape2D_hfphn")
+debug_color = Color(0.7, 0, 0, 0.41960785)
