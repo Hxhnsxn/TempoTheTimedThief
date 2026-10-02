@@ -85,9 +85,6 @@ func _physics_process(delta: float) -> void:
 	if Input.is_action_just_pressed("crouch"):
 		if is_on_floor():
 			is_crouching = true
-		else:
-			velocity.x = DIVESPEED * direction
-			velocity.y = 300
 		
 	if (
 		# to make sliding slower or more committal you
@@ -164,7 +161,7 @@ func _physics_process(delta: float) -> void:
 # not be crouching, not be airborne,
 # and the cooldown time on the basic attack needs to be finished.
 	if (
-		Input.is_action_pressed("attack")
+		Input.is_action_just_pressed("attack")
 		and not is_attacking
 		and not is_crouching
 		and is_on_floor()
@@ -173,6 +170,10 @@ func _physics_process(delta: float) -> void:
 		is_attacking = true
 		animation_player.play("Attack")
 		AudioManager.play_attack()
+	#divekick code
+	if Input.is_action_just_pressed("attack") and not is_on_floor() and direction != 0:
+		velocity.x = DIVESPEED * direction
+		velocity.y = 300
 	# This line prevents the attack animation from being
 	# interrupted by anything else.
 	if is_attacking:
