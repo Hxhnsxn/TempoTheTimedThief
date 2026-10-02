@@ -228,6 +228,8 @@ func _physics_process(delta: float) -> void:
 			animation_player.play("FallBeta")
 	if is_on_wall_only() and velocity.y > 0 and direction != 0:
 		animation_player.play("WallSlide")
+	if animation_player.current_animation != "DiveKick":
+		$DiveKick/DiveHitbox.disabled = true
 		
 #================PROCESS================
 func _process(delta: float) -> void:
@@ -248,12 +250,16 @@ func sprite_flip():
 		sprite.flip_h = false
 		if sign(hitbox.position.x) == -1:
 			hitbox.position.x *= -1
+		if sign($DiveKick/DiveHitbox.position.x) == -1:
+			$DiveKick/DiveHitbox.position.x *= -1
 		if sign(walljump_raycast.scale.x) == -1:
 			walljump_raycast.scale.x *= -1
 	elif direction < 0:
 		sprite.flip_h = true
 		if sign(hitbox.position.x) == 1:
 			hitbox.position.x *= -1
+		if sign($DiveKick/DiveHitbox.position.x) == 1:
+			$DiveKick/DiveHitbox.position.x *= -1
 		if sign(walljump_raycast.scale.x) == 1:
 			walljump_raycast.scale.x *= -1
 		
@@ -276,6 +282,9 @@ func exit_slow_zone() -> void:
 	SPEEDFACTOR = 1
 	fx1.visible = false
 
+func dive_bounce():
+	velocity.y = -300
+	$Timers/HurtCooldown.start(1)
 
 #================DAMAGE COLLISION================
 # When an enemy/hazard attack hitbox enters Tempo's hurtbox,
@@ -303,7 +312,7 @@ func take_damage(amount: int, hazard_pos: Vector2, knockback: float) -> void:
 		
 		hitflash_player.play("Hit Flash")
 		
-		$Timers/HurtCooldown.start()
+		$Timers/HurtCooldown.start(2)
 		
 #================DEATH================
 func die() -> void:
