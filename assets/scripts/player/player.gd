@@ -84,12 +84,7 @@ func _physics_process(delta: float) -> void:
 	# The player can only crouch while grounded.
 	if Input.is_action_just_pressed("crouch"):
 		if is_on_floor():
-			if direction and (not is_crouching or abs(velocity.x) < CRAWLSPEED + 5.0):
-				velocity.x = SLIDESPEED * direction
 			is_crouching = true
-		else:
-			velocity.x = DIVESPEED * direction
-			velocity.y = 300
 		
 	if (
 		# to make sliding slower or more committal you
@@ -105,6 +100,7 @@ func _physics_process(delta: float) -> void:
 		speed = CRAWLSPEED * SPEEDFACTOR
 		collisionbox.disabled = true
 		crouchcollisionbox.disabled = false
+		
 	else:
 		speed = MOVESPEED * SPEEDFACTOR
 		collisionbox.disabled = false
@@ -123,6 +119,10 @@ func _physics_process(delta: float) -> void:
 		coyote_timer.stop()
 		coyote_time_active = true
 		AudioManager.play_jump()
+	#slide controls
+	if Input.is_action_just_pressed("jump") and is_crouching:
+		if direction and abs(velocity.x) < CRAWLSPEED + 5.0:
+			velocity.x = SLIDESPEED * direction
 		
 #================FALL================
 	# Allows the player to perform short hops.
@@ -161,7 +161,7 @@ func _physics_process(delta: float) -> void:
 # not be crouching, not be airborne,
 # and the cooldown time on the basic attack needs to be finished.
 	if (
-		Input.is_action_pressed("attack")
+		Input.is_action_just_pressed("attack")
 		and not is_attacking
 		and not is_crouching
 		and is_on_floor()
@@ -170,6 +170,10 @@ func _physics_process(delta: float) -> void:
 		is_attacking = true
 		animation_player.play("Attack")
 		AudioManager.play_attack()
+	#divekick code
+	if Input.is_action_just_pressed("attack") and not is_on_floor() and direction != 0:
+		velocity.x = DIVESPEED * direction
+		velocity.y = 300
 	# This line prevents the attack animation from being
 	# interrupted by anything else.
 	if is_attacking:
