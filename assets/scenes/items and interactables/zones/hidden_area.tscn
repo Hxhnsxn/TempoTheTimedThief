@@ -1,0 +1,9 @@
+[gd_scene format=3 uid="uid://d15jcca7ngufe"]
+
+[ext_resource type="Script" uid="uid://dq2otuedu5qf8" path="res://assets/scripts/items and interactables/hidden_area.gd" id="1_hh2cn"]
+
+[node name="HiddenArea" type="Area2D" unique_id=1814220714]
+script = ExtResource("1_hh2cn")
+
+[connection signal="body_entered" from="." to="." method="_on_body_entered"]
+[connection signal="body_exited" from="." to="." method="_on_body_exited"]
