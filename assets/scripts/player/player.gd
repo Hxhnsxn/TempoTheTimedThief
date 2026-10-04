@@ -25,7 +25,7 @@ var is_crouching: bool = false  # Checks if the player is crouching.
 var is_attacking: bool = false	# Checks if the player is attacking.
 var is_damaged: bool = false	# Checks if the player is damaged.
 var is_sliding: bool = false    # Checks if the player is sliding.
-
+var can_interact: bool = false	# Checks if the player can interact.
 
 @onready var sprite: Sprite2D = $Sprite2D
 @onready var animation_player: AnimationPlayer = $AnimationPlayer
@@ -49,7 +49,9 @@ var walljump_force: float = 500
 @onready var hitbox: CollisionShape2D = $Attack/AttackHitbox
 @onready var hurtbox: CollisionShape2D = $Hurtbox/PlayerHurtbox
 #================VISUAL EFFECTS================
-@onready var fx1 :AnimatedSprite2D = $VisualEffects/FX1
+@onready var fx_move :AnimatedSprite2D = $VisualEffects/FX_Move
+@onready var fx_slow :AnimatedSprite2D = $VisualEffects/FX_Slow
+@onready var fx_wallslide :AnimatedSprite2D = $VisualEffects/FX_WallSlide
 
 #============================================================================
 #==================FUNCTIONS=================================================
@@ -62,10 +64,11 @@ func _ready():
 	
 	# List of visual effects.
 	# Certain criteria may change these to true
-	# (ex. slow zone sets fx1 to true upon entering,
+	# (ex. slow zone sets fx_slow to true upon entering,
 	# then back to false upon exiting)
-	fx1.visible = false
-	
+	fx_move.visible = false
+	fx_slow.visible = false
+	fx_wallslide.visible = false
 	curr_health = 100
 	
 #================PHYSICS PROCESS================
@@ -78,7 +81,12 @@ func _physics_process(delta: float) -> void:
 		# if wall sliding
 		if is_on_wall_only() and direction != 0:
 			# tweak wall slide speed
+			fx_wallslide.play()
+			fx_wallslide.visible = true
 			velocity.y = clamp(velocity.y, -99999, 80)
+	if not is_on_wall_only():
+		fx_wallslide.stop()
+		fx_wallslide.visible = false
 
 #================CROUCH================
 	# The player can only crouch while grounded.
@@ -99,8 +107,7 @@ func _physics_process(delta: float) -> void:
 	if is_crouching:
 		speed = CRAWLSPEED * SPEEDFACTOR
 		collisionbox.disabled = true
-		crouchcollisionbox.disabled = false
-		
+		crouchcollisionbox.disabled = false	
 	else:
 		speed = MOVESPEED * SPEEDFACTOR
 		collisionbox.disabled = false
@@ -195,6 +202,7 @@ func _physics_process(delta: float) -> void:
 	if is_on_floor():
 		# If the player is crouching:
 		if is_crouching:
+			fx_move.visible = false
 			# If the player is moving while crouching:
 			if direction:
 				if abs(velocity.x) > CRAWLSPEED + 10.0:
@@ -208,8 +216,10 @@ func _physics_process(delta: float) -> void:
 			# If the player is moving:
 			if direction:
 				animation_player.play("Move")
+				fx_move.visible = true
 			else:
 				animation_player.play("Idle")
+				fx_move.visible = false
 	
 	#=================================================
 	# Moved physics before animation to fix small visual jank
@@ -218,6 +228,7 @@ func _physics_process(delta: float) -> void:
 				
 	# If the player is airborne:
 	if not is_on_floor():
+		fx_move.visible = false
 		# if animation is flip animation keep doing that
 		if animation_player.current_animation == "Flip":
 			pass
@@ -245,13 +256,13 @@ func _process(delta: float) -> void:
 		hurtbox.disabled = false
 
 #================SPRITE FLIP================
-# Logic to reverse sprite based on x direction.
+# Logic to reverse sprites, some VFX and hitboxes based on x direction.
 # Tempo's sprites face right by default.
-# Also, this reverses the position of the attack hitbox to match
-# the direction Tempo is facing.
 func sprite_flip():
 	if direction > 0:
 		sprite.flip_h = false
+		fx_move.flip_h = false
+		fx_wallslide.flip_h = false
 		if sign(hitbox.position.x) == -1:
 			hitbox.position.x *= -1
 		if sign($DiveKick/DiveHitbox.position.x) == -1:
@@ -260,6 +271,8 @@ func sprite_flip():
 			walljump_raycast.scale.x *= -1
 	elif direction < 0:
 		sprite.flip_h = true
+		fx_move.flip_h = true
+		fx_wallslide.flip_h = true
 		if sign(hitbox.position.x) == 1:
 			hitbox.position.x *= -1
 		if sign($DiveKick/DiveHitbox.position.x) == 1:
@@ -281,10 +294,10 @@ func _on_animation_player_animation_finished(animation: StringName) -> void:
 # decreased. Upon exiting, return to normal.
 func enter_slow_zone() -> void:
 	SPEEDFACTOR = 0.35
-	fx1.visible = true
+	fx_slow.visible = true
 func exit_slow_zone() -> void:	
 	SPEEDFACTOR = 1
-	fx1.visible = false
+	fx_slow.visible = false
 
 func dive_bounce():
 	velocity.y = -300

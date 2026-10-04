@@ -2,16 +2,16 @@
 
 importer="texture"
 type="CompressedTexture2D"
-uid="uid://ckxwnivoumcy1"
-path="res://.godot/imported/Slow Zone (Candle).png-dfc1b65a73c3b28deecd75a6d666fc95.ctex"
+uid="uid://qflnsyldytv4"
+path="res://.godot/imported/Move.png-85965c2d9240fd72e7ffd58096067749.ctex"
 metadata={
 "vram_texture": false
 }
 
 [deps]
 
-source_file="res://assets/sprites/player/VFX Sheets/Slow Zone (Candle).png"
-dest_files=["res://.godot/imported/Slow Zone (Candle).png-dfc1b65a73c3b28deecd75a6d666fc95.ctex"]
+source_file="res://assets/sprites/player/VFX Sheets/Move.png"
+dest_files=["res://.godot/imported/Move.png-85965c2d9240fd72e7ffd58096067749.ctex"]
 
 [params]
 
