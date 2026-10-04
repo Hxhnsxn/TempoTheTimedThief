@@ -236,7 +236,7 @@ func _physics_process(delta: float) -> void:
 		if animation_player.current_animation == "Flip":
 			pass
 		# if player is moving fast enough to be diving
-		elif abs(velocity.x) > MOVESPEED + 20:
+		elif abs(velocity.x) > MOVESPEED + 20 and velocity.y > 0:
 			animation_player.play("DiveKick")
 		# If the player is moving upward:
 		elif sign(velocity.y) == -1:
