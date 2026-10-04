@@ -8,6 +8,7 @@
 [ext_resource type="Texture2D" uid="uid://dojgir4q76ea7" path="res://assets/sprites/player/Sheets/Jump.png" id="3_xvhxs"]
 [ext_resource type="Texture2D" uid="uid://d2eu0x46hxdch" path="res://assets/sprites/player/Sheets/Crouch.png" id="4_5v77c"]
 [ext_resource type="Texture2D" uid="uid://cmppn4brknccc" path="res://assets/sprites/player/Sheets/Crawl.png" id="4_n7aby"]
+[ext_resource type="Script" uid="uid://c3a3spfddkdn6" path="res://assets/scripts/player/camera.gd" id="4_oet4l"]
 [ext_resource type="Texture2D" uid="uid://bwvf1g3onqqpp" path="res://assets/sprites/player/Sheets/Fall.png" id="6_0g25m"]
 [ext_resource type="Texture2D" uid="uid://cay78mkle2mty" path="res://assets/sprites/player/Sheets/Damaged.png" id="6_u84jc"]
 [ext_resource type="Texture2D" uid="uid://cf0n15puydccy" path="res://assets/sprites/player/Sheets/Dive Kick.png" id="6_yfi7d"]
@@ -980,7 +981,9 @@ position = Vector2(0, -44)
 zoom = Vector2(3, 3)
 process_callback = 0
 limit_smoothed = true
+position_smoothing_enabled = true
 position_smoothing_speed = 10.0
+script = ExtResource("4_oet4l")
 
 [node name="AnimationPlayer" type="AnimationPlayer" parent="." unique_id=1517579445]
 libraries/ = SubResource("AnimationLibrary_14505")
