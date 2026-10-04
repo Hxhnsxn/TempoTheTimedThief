@@ -1004,6 +1004,7 @@ wait_time = 2.0
 one_shot = true
 
 [node name="VisualEffects" type="Node2D" parent="." unique_id=40458692]
+editor_description = "Everything in this node should have visibility toggled off by default."
 
 [node name="FX1" type="AnimatedSprite2D" parent="VisualEffects" unique_id=1350513643]
 visible = false
