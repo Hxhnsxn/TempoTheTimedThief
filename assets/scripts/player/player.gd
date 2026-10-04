@@ -174,6 +174,7 @@ func _physics_process(delta: float) -> void:
 	if Input.is_action_just_pressed("attack") and not is_on_floor() and direction != 0:
 		velocity.x = DIVESPEED * direction
 		velocity.y = 300
+		animation_player.play("DiveKick")
 	# This line prevents the attack animation from being
 	# interrupted by anything else.
 	if is_attacking:
@@ -217,8 +218,11 @@ func _physics_process(delta: float) -> void:
 				
 	# If the player is airborne:
 	if not is_on_floor():
+		# if animation is flip animation keep doing that
+		if animation_player.current_animation == "Flip":
+			pass
 		# if player is moving fast enough to be diving
-		if abs(velocity.x) > MOVESPEED + 20:
+		elif abs(velocity.x) > MOVESPEED + 20:
 			animation_player.play("DiveKick")
 		# If the player is moving upward:
 		elif sign(velocity.y) == -1:
@@ -285,6 +289,7 @@ func exit_slow_zone() -> void:
 func dive_bounce():
 	velocity.y = -300
 	$Timers/HurtCooldown.start(1)
+	$AnimationPlayer.play("Flip")
 
 #================DAMAGE COLLISION================
 # When an enemy/hazard attack hitbox enters Tempo's hurtbox,
