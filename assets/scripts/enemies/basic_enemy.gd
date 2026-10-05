@@ -54,6 +54,7 @@ func _on_damage_area_area_entered(area: Area2D) -> void:
 	if area.name == "Attack":
 		hitflash_player.play("Hit Flash")
 		health -= 1
+		Hitstop.hitstop(0.05)
 		if health <= 0:
 			queue_free()
 			print("Enemy died!")
@@ -61,6 +62,7 @@ func _on_damage_area_area_entered(area: Area2D) -> void:
 		area.get_parent().dive_bounce()
 		hitflash_player.play("Hit Flash")
 		health -= 1
+		Hitstop.hitstop(0.05)
 		if health <= 0:
 			queue_free()
 			print("Enemy died!")

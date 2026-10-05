@@ -129,6 +129,7 @@ func _physics_process(delta: float) -> void:
 	#slide controls
 	if Input.is_action_just_pressed("jump") and is_crouching:
 		if direction and abs(velocity.x) < CRAWLSPEED + 5.0:
+			animation_player.play("Slide")
 			velocity.x = SLIDESPEED * direction
 		
 #================FALL================
@@ -178,7 +179,7 @@ func _physics_process(delta: float) -> void:
 		animation_player.play("Attack")
 		AudioManager.play_attack()
 	#divekick code
-	if Input.is_action_just_pressed("attack") and not is_on_floor() and direction != 0:
+	if Input.is_action_just_pressed("attack") and not is_on_floor() and Input.is_action_pressed("crouch"):
 		velocity.x = DIVESPEED * direction
 		velocity.y = 300
 		animation_player.play("DiveKick")
@@ -205,7 +206,9 @@ func _physics_process(delta: float) -> void:
 			fx_move.visible = false
 			# If the player is moving while crouching:
 			if direction:
-				if abs(velocity.x) > CRAWLSPEED + 10.0:
+				if abs(velocity.x) < CRAWLSPEED + 10.0:
+					animation_player.play("Crawl")
+				if animation_player.current_animation == "Slide":
 					animation_player.play("Slide")
 				else:
 					animation_player.play("Crawl")
@@ -233,7 +236,7 @@ func _physics_process(delta: float) -> void:
 		if animation_player.current_animation == "Flip":
 			pass
 		# if player is moving fast enough to be diving
-		elif abs(velocity.x) > MOVESPEED + 20:
+		elif abs(velocity.x) > MOVESPEED + 20 and velocity.y > 0:
 			animation_player.play("DiveKick")
 		# If the player is moving upward:
 		elif sign(velocity.y) == -1:
