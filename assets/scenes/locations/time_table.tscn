@@ -1,0 +1,103 @@
+[gd_scene format=3 uid="uid://b0ra88rj8lucg"]
+
+[ext_resource type="Script" uid="uid://dvqt5s27axjcm" path="res://assets/scripts/items and interactables/TimeTable/time_table_circle.gd" id="1_n8r23"]
+[ext_resource type="Texture2D" uid="uid://xmw5ryh3s7pk" path="res://icon.svg" id="2_sb3xe"]
+[ext_resource type="Texture2D" uid="uid://cyrkd5mydwa4w" path="res://assets/sprites/extras/Atto (Placeholder).png" id="3_sb3xe"]
+
+[node name="TimeTable" type="Node2D" unique_id=1974711474]
+
+[node name="TimeTableCircle" type="Control" parent="." unique_id=1561556262]
+layout_mode = 3
+anchors_preset = 8
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+grow_horizontal = 2
+grow_vertical = 2
+script = ExtResource("1_n8r23")
+offset_degrees = 60.0
+
+[node name="Base" type="TextureRect" parent="TimeTableCircle" unique_id=521678898]
+layout_mode = 1
+anchors_preset = 8
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+offset_left = -256.0
+offset_top = -256.0
+offset_right = 256.0
+offset_bottom = 256.0
+grow_horizontal = 2
+grow_vertical = 2
+texture = ExtResource("2_sb3xe")
+
+[node name="Towers" type="Control" parent="TimeTableCircle" unique_id=924081754]
+anchors_preset = 0
+offset_right = 40.0
+offset_bottom = 40.0
+
+[node name="Tower1" type="TextureButton" parent="TimeTableCircle/Towers" unique_id=849404794]
+layout_mode = 1
+anchors_preset = 8
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+offset_left = -84.0
+offset_top = -84.0
+offset_right = 44.0
+offset_bottom = 44.0
+grow_horizontal = 2
+grow_vertical = 2
+scale = Vector2(0.5, 0.5)
+texture_normal = ExtResource("3_sb3xe")
+
+[node name="Tower2" type="TextureButton" parent="TimeTableCircle/Towers" unique_id=118852364]
+layout_mode = 1
+anchors_preset = 8
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+offset_left = -84.0
+offset_top = -84.0
+offset_right = 44.0
+offset_bottom = 44.0
+grow_horizontal = 2
+grow_vertical = 2
+scale = Vector2(0.5, 0.5)
+texture_normal = ExtResource("3_sb3xe")
+
+[node name="Tower3" type="TextureButton" parent="TimeTableCircle/Towers" unique_id=562702965]
+layout_mode = 1
+anchors_preset = 8
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+offset_left = -84.0
+offset_top = -84.0
+offset_right = 44.0
+offset_bottom = 44.0
+grow_horizontal = 2
+grow_vertical = 2
+scale = Vector2(0.5, 0.5)
+texture_normal = ExtResource("3_sb3xe")
+
+[node name="Tower4" type="TextureButton" parent="TimeTableCircle/Towers" unique_id=1299734505]
+layout_mode = 1
+anchors_preset = 8
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+offset_left = -84.0
+offset_top = -84.0
+offset_right = 44.0
+offset_bottom = 44.0
+grow_horizontal = 2
+grow_vertical = 2
+scale = Vector2(0.5, 0.5)
+texture_normal = ExtResource("3_sb3xe")
