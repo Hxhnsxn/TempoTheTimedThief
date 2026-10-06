@@ -742,10 +742,6 @@ rotation = 1.5707964
 position = Vector2(62, 74)
 rotation = 1.5707964
 
-[node name="Spikes6" parent="Spikes" unique_id=349069515 instance=ExtResource("11_wxus5")]
-position = Vector2(62, 58)
-rotation = 1.5707964
-
 [node name="Spikes7" parent="Spikes" unique_id=686609154 instance=ExtResource("11_wxus5")]
 position = Vector2(94, 10)
 
