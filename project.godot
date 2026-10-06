@@ -19,6 +19,7 @@ config/icon="res://icon.svg"
 
 AudioManager="*uid://mq8b6oh2egqf"
 Hitstop="*uid://cvgi7v2mrp2fw"
+TransitionScene="*uid://b8lrblnl6vkk1"
 
 [display]
 
