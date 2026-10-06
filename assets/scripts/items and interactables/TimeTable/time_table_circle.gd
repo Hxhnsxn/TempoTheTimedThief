@@ -114,6 +114,7 @@ func update_tower_carousel(animated: bool) -> void:
 func _get_wrapped_offset(offset: int) -> int:
 	var half = floorf(towers.size()) / 2
 	if (offset > half):
+		offset -= towers.size()
 	elif (offset < -half):
 		offset += towers.size()
 	return offset
